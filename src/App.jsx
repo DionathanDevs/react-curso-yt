@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AddTask from "./components/AddTasks"
 import Tasks from "./components/Tasks"
 import { v4 } from "uuid"
@@ -6,20 +6,28 @@ import { v4 } from "uuid"
 
 function App(){
 
-const [tasks, setTasks] = useState([
-  {
-  id: 1,
-  title: "Estudar programação",
-  description: "Estudar programação para se tornar um dev full stack",
-  isCompleted: false
-  },
-  {
-  id: 2,
-  title: "Estudar Inglês",
-  description: "Estudar Inglês para se tornar um dev full stack",
-  isCompleted: false
-  }
-])
+const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks") || []));
+
+useEffect(() => {
+  localStorage.setItem("tasks", JSON.stringify(tasks))
+}, [tasks])
+
+useEffect(() => {
+async function fecthTasks(){
+  // CHAMAR API
+const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5');
+
+
+//PEGAR OS DADOS
+const data = await response.json()
+
+//ARMAZERNAR
+
+setTasks(data);
+}
+
+fecthTasks();
+}, [])
 
 function onTaskClick(taskId){
   const newTasks = tasks.map(task => {
