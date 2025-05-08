@@ -6,7 +6,15 @@ import { v4 } from "uuid"
 
 function App(){
 
-const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks") || []));
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const storedTasks = localStorage.getItem("tasks");
+      return storedTasks ? JSON.parse(storedTasks) : [];
+    } catch (error) {
+      console.error("Erro ao carregar tasks do localStorage", error);
+      return [];
+    }
+  });
 
 useEffect(() => {
   localStorage.setItem("tasks", JSON.stringify(tasks))
