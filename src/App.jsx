@@ -27,19 +27,29 @@ function App() {
     }
   }, [tasks]);
 
-  // Buscar tarefas da API apenas uma vez
+  /*
+  // Código comentado: pegar dados da API
   useEffect(() => {
     async function fetchTasks() {
       try {
         const response = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=5");
-        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar API: ${response.status}`);
+        }
+
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : [];
+
         setTasks(data);
       } catch (error) {
         console.error("Erro ao buscar tasks da API", error);
       }
     }
+
     fetchTasks();
   }, []);
+  */
 
   function onTaskClick(taskId) {
     const newTasks = tasks.map((task) =>
