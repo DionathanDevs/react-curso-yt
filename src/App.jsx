@@ -1,89 +1,79 @@
-import { useEffect, useState } from "react"
-import AddTask from "./components/AddTasks"
-import Tasks from "./components/Tasks"
-import { v4 } from "uuid"
+import { useEffect, useState } from "react";
+import AddTask from "./components/AddTasks";
+import Tasks from "./components/Tasks";
+import { v4 } from "uuid";
 
+function App() {
+  const [tasks, setTasks] = useState([]);
 
-function App(){
-
-  const [tasks, setTasks] = useState(() => {
+  // Carregar tarefas do localStorage no cliente
+  useEffect(() => {
     try {
       const storedTasks = localStorage.getItem("tasks");
-      return storedTasks ? JSON.parse(storedTasks) : [];
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
     } catch (error) {
       console.error("Erro ao carregar tasks do localStorage", error);
-      return [];
     }
-  });
+  }, []);
 
-useEffect(() => {
-  localStorage.setItem("tasks", JSON.stringify(tasks))
-}, [tasks])
+  // Salvar no localStorage sempre que tasks mudar
+  useEffect(() => {
+    try {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    } catch (error) {
+      console.error("Erro ao salvar tasks no localStorage", error);
+    }
+  }, [tasks]);
 
-useEffect(() => {
-async function fecthTasks(){
-  // CHAMAR API
-const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5');
-
-
-//PEGAR OS DADOS
-const data = await response.json()
-
-//ARMAZERNAR
-
-setTasks(data);
-}
-
-fecthTasks();
-}, [])
-
-function onTaskClick(taskId){
-  const newTasks = tasks.map(task => {
-
-
-    if(task.id == taskId){
-      return{
-        ...task, isCompleted: !task.isCompleted
+  // Buscar tarefas da API apenas uma vez
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const response = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=5");
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Erro ao buscar tasks da API", error);
       }
-    } 
+    }
+    fetchTasks();
+  }, []);
 
-    return task;
-
-
-  
-  })
-  setTasks(newTasks);
-}
-
-
-function onDeleteTaskClick(taskId){
-  const newTasks = tasks.filter(task => task.id != taskId)
-  setTasks(newTasks);
-}
-
-function onAddTaskSubmit(title, description){
-  const newTask = {
-    id: v4(),
-    title: title,
-    description: description,
-    isCompleted: false,
+  function onTaskClick(taskId) {
+    const newTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
+    );
+    setTasks(newTasks);
   }
 
-  setTasks([...tasks, newTask])
-}
+  function onDeleteTaskClick(taskId) {
+    const newTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(newTasks);
+  }
 
+  function onAddTaskSubmit(title, description) {
+    const newTask = {
+      id: v4(),
+      title,
+      description,
+      isCompleted: false,
+    };
+    setTasks([...tasks, newTask]);
+  }
 
-
-  return(
+  return (
     <div className="w-screen h-screen bg-slate-500 flex justify-center p-6">
       <div className="w-[500px] space-y-4">
-      <h1 className="text-3xl text-slate-100 font-bold text-center">Gerenciador de Tarefas</h1>
-      <AddTask onAddTaskSubmit={onAddTaskSubmit} />
-      <Tasks tasks={tasks} onTaskClick={onTaskClick} onDeleteTaskClick={onDeleteTaskClick}/>
+        <h1 className="text-3xl text-slate-100 font-bold text-center">
+          Gerenciador de Tarefas
+        </h1>
+        <AddTask onAddTaskSubmit={onAddTaskSubmit} />
+        <Tasks tasks={tasks} onTaskClick={onTaskClick} onDeleteTaskClick={onDeleteTaskClick} />
       </div>
     </div>
-  )
-
+  );
 }
 
-export default App
+export default App;
