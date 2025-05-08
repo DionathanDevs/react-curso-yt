@@ -1,17 +1,29 @@
-# 📋 Gerenciador de Tarefas
+# Gerenciador de Tarefas 📝
 
-Um simples gerenciador de tarefas feito em React. Ele permite adicionar, marcar como concluídas e excluir tarefas, além de buscar uma lista inicial de tarefas de uma API externa. As tarefas são armazenadas no `localStorage` para persistirem entre recarregamentos.
+Um gerenciador simples de tarefas (ToDo List) feito em **React** com **Vite** para build rápido e deploy na **Vercel**.  
+Atualmente usa **localStorage** para armazenar as tarefas no navegador.
 
-## 🚀 Funcionalidades
+🌎 **Demo online:** [Acesse aqui](https://react-curso-7su082t6z-dionathandevs-projects.vercel.app/)
 
-- ✅ Adicionar tarefas com título e descrição
-- ✅ Marcar tarefas como concluídas / não concluídas
-- ✅ Excluir tarefas
-- ✅ Persistência local usando `localStorage`
-- ✅ Busca inicial de tarefas usando API pública (`jsonplaceholder.typicode.com`)
+---
 
-## 📦 Tecnologias utilizadas
+## 🚀 Tecnologias utilizadas
 
 - [React](https://react.dev/)
-- [UUID](https://www.npmjs.com/package/uuid)
-- TailwindCSS (para estilização)
+- [Vite](https://vitejs.dev/)
+- [UUID](https://www.npmjs.com/package/uuid) → geração de IDs únicos para as tarefas
+- [Tailwind CSS](https://tailwindcss.com/) → estilização rápida e responsiva
+- [localStorage](https://developer.mozilla.org/pt-BR/docs/Web/API/Window/localStorage) → persistência dos dados no navegador
+
+---
+
+## ⚙️ Funcionalidades
+
+- ✅ Adicionar nova tarefa com título e descrição
+- ✅ Listar todas as tarefas salvas
+- ✅ Marcar tarefas como concluídas
+- ✅ Excluir tarefas
+- ✅ Persistência local via **localStorage**
+- 🔥 *(opcional, comentado no código)* Integração com API pública JSONPlaceholder
+
+---
